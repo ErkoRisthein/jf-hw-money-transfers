@@ -1,8 +1,5 @@
 Java Fundamentals - Homework 7
 ===========
-
-This project is **Homework 7** for the [Java Fundamentals](https://courses.cs.ttu.ee/pages/ITI8905) course. The goal of this homework is to ...
-
 Description
 -------------------
 
