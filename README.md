@@ -20,6 +20,7 @@ Requirements
 10. Buffer program’s output `PrintStream out = new PrintStream(new BufferedOutputStream(System.out));`
 11. After all donator threads are finished, print all balances and `flush()` the program’s output.
 12. Don’t use `exit()` or `halt()` to stop the program.
+13. **Format the code consistently! Points will be deducted for inconsistent code style!!**
 
 Sample output
 -----------------------
