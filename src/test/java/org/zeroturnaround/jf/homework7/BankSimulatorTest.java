@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 public class BankSimulatorTest {
@@ -21,14 +22,21 @@ public class BankSimulatorTest {
     AtomicReference<RuntimeException> exception = new AtomicReference<>();
 
     Runnable assertThatTotalIsConsistent = () -> {
+      try {
+        Thread.sleep(RandomUtils.nextLong(1, 50));
+      }
+      catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+
       while (simulator.isRunning()) {
         if (exception.get() != null) {
           return;
         }
 
         try {
-          assertThat(simulator.getBalances().stream().mapToInt(Integer::intValue).sum()).isEqualTo(n * n);
-          Thread.sleep(50L);
+          assertThatTotalIsConsistent(simulator, n);
+          Thread.sleep(RandomUtils.nextLong(20, 50));
         }
         catch (Throwable e) {
           exception.set(new RuntimeException(e));
@@ -50,18 +58,22 @@ public class BankSimulatorTest {
       try {
         Thread.sleep(50L);
       }
-      catch (Exception e) {
+      catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
     }
   }
 
   private void assertThatInitialStateIsCorrect(BankSimulator simulator, int n) {
-    assertThat(simulator.getBalances()).isEqualTo(IntStream.range(0, n).mapToObj(i -> n).collect(toList()));
+    assertThat(simulator.getBalances())
+        .overridingErrorMessage("All initial balances must equal " + n)
+        .isEqualTo(IntStream.range(0, n).mapToObj(i -> n).collect(toList()));
   }
 
   private void assertThatTotalIsConsistent(BankSimulator simulator, int n) {
-    assertThat(simulator.getBalances().stream().mapToInt(Integer::intValue).sum()).isEqualTo(n * n);
+    assertThat(simulator.getBalances().stream().mapToInt(Integer::intValue).sum())
+        .overridingErrorMessage("Total sum of all balances is not %d", n * n)
+        .isEqualTo(n * n);
   }
 
   @Test

@@ -54,7 +54,7 @@ Various tips
 
 1. Consider using `ReadWriteLock` in `Donator#transferTo` and `BankSimulator#getBalances` to stop all transfers while reading balances. Remember that read lock cannot be acquired while write lock is being held.
 2. To implement the requirements you might need to modify existing code as well.
-3. `BankSimulatorTest` is not a 100% guarantee that your code is thread-safe, but it gives you a good-enough confidence. Run it multiple times to be sure.
+3. Passing `BankSimulatorTest` does not give you a 100% guarantee that the code is thread-safe.
 4. If you still want to build the application without fixing the tests, then you can do that by skipping them in the build by adding `-DskipTests` to the command:
 ```shell
 ./mvnw clean package -DskipTests
