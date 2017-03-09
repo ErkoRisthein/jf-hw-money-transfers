@@ -5,9 +5,9 @@ Description
 
 You are given a bank simulator program, which demonstrates concurrent transfers of money.
 * The program creates **n** number of accounts each having **n** as its initial balance. **n** is taken from the program’s main arguments.
-* The program creates a donator **thread per account** with a **source account** and a **list of target accounts** - a shuffled list of all accounts except the source one.
-* Every donator thread transfers **1 unit of money** from the **source account** to **every recipient account** sleeping 100ms after each transfer. After those transfers the thread stops.
-* Bank simulator prints all balances before starting the transfers, after the transfers have finished and during the transfers once per 100ms. Printing is done in the main thread in parallel with transfers.
+* The program creates a **donator thread per account** with a **source account** and a **list of target accounts** - a shuffled list of all accounts except the source one.
+* Every donator thread transfers **1 unit of money** from the **source account** to **every recipient account** sleeping _100ms_ after each transfer. After those transfers the thread stops.
+* Bank simulator prints all balances before starting the transfers, after the transfers have finished and during the transfers once per _100ms_. Printing is done in the main thread in parallel with transfers.
 * Printing format: **balance<sub>1</sub> balance<sub>2</sub> balance<sub>3</sub> ... balance<sub>n</sub> total**
 
 Some of the things mentioned above are not implemented correctly or not implemented at all. Your task is to implement them in a thread-safe, deadlock-free manner.
@@ -50,7 +50,7 @@ public boolean isRunning() {
 6) **Format the code consistently! Points will be deducted for inconsistent code style!!**
 
 Various tips
-============
+-----------------------
 
 1. Consider using `ReadWriteLock` in `Donator#transferTo` and `BankSimulator#getBalances` to stop all transfers while reading balances. Remember that read lock cannot be acquired while write lock is being held.
 2. To implement the requirements you might need to modify existing code as well.
