@@ -3,24 +3,61 @@ Java Fundamentals - Homework 7
 Description
 -------------------
 
-Write a Java program which demonstrates concurrent transfers of money.
+You are given a bank simulator program, which demonstrates concurrent transfers of money.
+* The program creates **n** number of accounts each having **n** as its initial balance. **n** is taken from the program’s main arguments.
+* The program creates a donator thread per account with a source account and a list of target accounts - a shuffled list of all accounts except the source one.
+* Every donator thread transfers 1 unit of money from the source account to every recipient account sleeping 100ms after each transfer. After those transfers the thread stops.
+* Bank simulator prints all balances before starting the transfers, after the transfers have finished and during the transfers once per 100ms. Printing is done in the main thread in parallel with transfers.
+* Printing format: **balance<sub>1</sub> balance<sub>2</sub> balance<sub>3</sub> ... balance<sub>n</sub> total**
+
+Some of the things mentioned above are not implemented correctly or not implemented at all. Your task is to implement them in a thread-safe, deadlock-free manner.
+
+Run the tests to verify your solution.
 
 Requirements
 -----------------------
+1) Implement `Donator#transferTo(targetAccount)`:
+```java
+/**
+ * Transfers 1 unit of money from {@link #account} to {@code targetAccount} in a thread-safe, deadlock-free manner.
+ */
+private void transferTo(Account targetAccount) {
+  // FIXME
+}
+```
+2) Implement `BankSimulator#getBalances()`:
+```java
+/**
+ * Returns balances of all {@link #accounts} in a thread-safe, deadlock-free manner.
+ */
+List<Integer> getBalances() {
+  return new ArrayList<>(); // FIXME
+}
+```
+3) Implement `BankSimulator#isRunning()`:
+```java
+/**
+ * Returns {@code false} when all transfers have completed ({@code true} otherwise) in a thread-safe, deadlock-free manner.
+ */
+public boolean isRunning() {
+  return true; // FIXME
+}
+```
+4) Tests must pass. `BankSimulatorTest` is not a 100% guarantee that your code is thread-safe, but it gives you a good-enough confidence. Run it multiple times to be sure.
 
-1. Create **n** number of accounts with each having **n** as its initial balance. Take **n** from the program’s main arguments. 
-2. Implement a method for transferring a given amount from one account to another. 
-3. Implement a method for printing balances of all accounts as well as their sum. Output form (single line): **b<sub>1</sub> b<sub>2</sub> b<sub>3</sub> ... b<sub>n</sub> sum**.
-4. For each (source) account create a donator thread with a list of recipients - a shuffled list of all accounts except the source one.
-5. A donator thread must transfer 1 unit from source account to each recipient account sleeping 100ms after each transfer. After those transfers, the thread must stop.
-6. Print all balances before starting the transfers, after the transfers have finished and during the transfers once per 100ms. 
-7. Transfers must be thread safe and run concurrently if they have no accounts in common – lock on the source and target accounts but avoid deadlocks. 
-8. Printing all balances must be thread safe. The sum of all accounts must stay consistent. Stop all transfers while printing the balances - use `ReadWriteLock.writeLock()` around printing the balances and a `ReadWriteLock.readLock()` around each transfer.
-9. Create all donator threads before actually starting them.
-10. Buffer program’s output `PrintStream out = new PrintStream(new BufferedOutputStream(System.out));`
-11. After all donator threads are finished, print all balances and `flush()` the program’s output.
-12. Don’t use `exit()` or `halt()` to stop the program.
-13. **Format the code consistently! Points will be deducted for inconsistent code style!!**
+5) Don’t use `exit()` or `halt()` to stop the program.
+
+6) **Format the code consistently! Points will be deducted for inconsistent code style!!**
+
+Various tips
+============
+
+1. Consider using `ReadWriteLock` in `Donator#transferTo` and `BankSimulator#getBalances` to stop all transfers while reading balances. Remember that read lock cannot be acquired while write lock is being held.
+2. To implement the requirements you might need to modify the existing code as well.
+3. If you still want to build the application without fixing the tests, then you can do that by skipping them in the build by adding `-DskipTests` to the command:
+```shell
+./mvnw clean package -DskipTests
+```
 
 Sample output
 -----------------------
@@ -66,13 +103,6 @@ java -jar target/jf-homework7.jar 10
 10 10 10 10 10 10 10 10 10 10 100
 
 10 10 10 10 10 10 10 10 10 10 100
-```
-Various tips
-============
-
-If you still want to build the application without fixing the tests, then you can do that by skipping them in the build by adding `-DskipTests` to the command:
-```shell
-./mvnw clean package -DskipTests
 ```
 
 Submitting your assignment

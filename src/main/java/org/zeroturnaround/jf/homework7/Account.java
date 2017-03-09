@@ -2,15 +2,13 @@ package org.zeroturnaround.jf.homework7;
 
 public class Account {
 
-  private int id;
   private int balance;
 
-  public Account(int id, int initialBalance) {
-    this.id = id;
+  public Account(int initialBalance) {
     this.balance = initialBalance;
   }
 
-  public void transferTo(Account account, int amount) {
-
+  public int getBalance() {
+    return balance;
   }
 }
