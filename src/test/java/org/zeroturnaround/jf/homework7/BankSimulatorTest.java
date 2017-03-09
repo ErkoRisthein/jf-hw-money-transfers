@@ -16,11 +16,11 @@ public class BankSimulatorTest {
 
     simulator.startTransfers();
 
-    assertThatSumIsConsistent(simulator, n);
+    assertThatTotalIsConsistent(simulator, n);
 
     AtomicReference<RuntimeException> exception = new AtomicReference<>();
 
-    Runnable atRandomTimeMomentsAssertThatSumIsConsistent = () -> {
+    Runnable assertThatTotalIsConsistent = () -> {
       while (simulator.isRunning()) {
         if (exception.get() != null) {
           return;
@@ -36,16 +36,16 @@ public class BankSimulatorTest {
       }
     };
 
-    IntStream.range(0, 50).forEach(i -> new Thread(atRandomTimeMomentsAssertThatSumIsConsistent).start());
+    IntStream.range(0, 50).forEach(i -> new Thread(assertThatTotalIsConsistent).start());
 
-    assertThatSumIsConsistent(simulator, n);
+    assertThatTotalIsConsistent(simulator, n);
 
     while (simulator.isRunning()) {
       if (exception.get() != null) {
         throw exception.get();
       }
 
-      assertThatSumIsConsistent(simulator, n);
+      assertThatTotalIsConsistent(simulator, n);
 
       try {
         Thread.sleep(50L);
@@ -60,42 +60,42 @@ public class BankSimulatorTest {
     assertThat(simulator.getBalances()).isEqualTo(IntStream.range(0, n).mapToObj(i -> n).collect(toList()));
   }
 
-  private void assertThatSumIsConsistent(BankSimulator simulator, int n) {
+  private void assertThatTotalIsConsistent(BankSimulator simulator, int n) {
     assertThat(simulator.getBalances().stream().mapToInt(Integer::intValue).sum()).isEqualTo(n * n);
   }
 
   @Test
-  public void transfersAreCorrentWith_n_1() {
+  public void transfersAreCorrectWith_n_1() {
     transfersAreCorrectWith(1);
   }
 
   @Test
-  public void transfersAreCorrentWith_n_5() {
+  public void transfersAreCorrectWith_n_5() {
     transfersAreCorrectWith(5);
   }
 
   @Test
-  public void transfersAreCorrentWith_n_10() {
+  public void transfersAreCorrectWith_n_10() {
     transfersAreCorrectWith(10);
   }
 
   @Test
-  public void transfersAreCorrentWith_n_15() {
+  public void transfersAreCorrectWith_n_15() {
     transfersAreCorrectWith(15);
   }
 
   @Test
-  public void transfersAreCorrentWith_n_25() {
+  public void transfersAreCorrectWith_n_25() {
     transfersAreCorrectWith(25);
   }
 
   @Test
-  public void transfersAreCorrentWith_n_50() {
+  public void transfersAreCorrectWith_n_50() {
     transfersAreCorrectWith(50);
   }
 
   @Test
-  public void transfersAreCorrentWith_n_100() {
+  public void transfersAreCorrectWith_n_100() {
     transfersAreCorrectWith(100);
   }
 }
