@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
+import org.apache.commons.lang3.RandomUtils;
 
 public class BankSimulator {
   private static final PrintStream OUT = new PrintStream(new BufferedOutputStream(System.out));
@@ -36,7 +37,7 @@ public class BankSimulator {
    * Returns {@code false} when all transfers have completed ({@code true} otherwise) in a thread-safe, deadlock-free manner.
    */
   public boolean isRunning() {
-    return true; // FIXME
+    return RandomUtils.nextInt(0, 10) < 9; // FIXME
   }
 
   /**

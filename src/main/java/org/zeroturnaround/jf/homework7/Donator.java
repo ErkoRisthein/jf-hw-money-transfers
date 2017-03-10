@@ -19,6 +19,7 @@ public class Donator implements Runnable {
 
   /**
    * Transfers 1 unit of money from {@link #account} to {@code targetAccount} in a thread-safe, deadlock-free manner.
+   * Sleeps for 100ms after every transfer.
    */
   private void transferTo(Account targetAccount) {
     // FIXME

@@ -16,16 +16,17 @@ Run the tests to verify your solution.
 
 Requirements
 -----------------------
-1) Implement `Donator#transferTo(targetAccount)`:
+1) Implement `Donator#transferTo(targetAccount)` according to the JavaDoc:
 ```java
 /**
  * Transfers 1 unit of money from {@link #account} to {@code targetAccount} in a thread-safe, deadlock-free manner.
+ * Sleeps for 100ms after every transfer.
  */
 private void transferTo(Account targetAccount) {
   // FIXME
 }
 ```
-2) Implement `BankSimulator#getBalances()`:
+2) Implement `BankSimulator#getBalances()` according to the JavaDoc:
 ```java
 /**
  * Returns balances of all {@link #accounts} in a thread-safe, deadlock-free manner.
@@ -34,28 +35,27 @@ List<Integer> getBalances() {
   return new ArrayList<>(); // FIXME
 }
 ```
-3) Implement `BankSimulator#isRunning()`:
+3) Implement `BankSimulator#isRunning()` according to the JavaDoc:
 ```java
 /**
  * Returns {@code false} when all transfers have completed ({@code true} otherwise) in a thread-safe, deadlock-free manner.
  */
 public boolean isRunning() {
-  return true; // FIXME
+  return RandomUtils.nextInt(0, 10) < 9; // FIXME
 }
 ```
 4) Tests must pass.
 
 5) Don’t use `exit()` or `halt()` to stop the program.
 
-6) **Format the code consistently! Points will be deducted for inconsistent code style!!**
-
 Various tips
 -----------------------
 
-1. Consider using `ReadWriteLock` in `Donator#transferTo` and `BankSimulator#getBalances` to stop all transfers while reading balances. Remember that read lock cannot be acquired while write lock is being held.
-2. To implement the requirements you might need to modify existing code as well.
-3. Passing `BankSimulatorTest` does not give you a 100% guarantee that the code is thread-safe.
-4. If you still want to build the application without fixing the tests, then you can do that by skipping them in the build by adding `-DskipTests` to the command:
+1. During transfers lock on the source and target accounts but avoid deadlocks. Think how you can **always** guarantee that any pair of accounts is locked in the same order.
+2. Consider using `ReadWriteLock` in `Donator#transferTo` and `BankSimulator#getBalances` to stop all transfers while reading balances. Remember that read lock cannot be acquired while write lock is being held. _Hint: the solution is a bit counter-intuitive :)_
+3. To implement the requirements you might need to modify existing code as well.
+4. Passing `BankSimulatorTest` does not give you a 100% guarantee that the code is thread-safe.
+5. If you still want to build the application without fixing the tests, then you can do that by skipping them in the build by adding `-DskipTests` to the command:
 ```shell
 ./mvnw clean package -DskipTests
 ```
