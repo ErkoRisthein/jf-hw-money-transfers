@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.RandomUtils;
 
 public class BankSimulator {
+
   private static final PrintStream OUT = new PrintStream(new BufferedOutputStream(System.out));
 
   private final List<Account> accounts;
@@ -52,11 +53,16 @@ public class BankSimulator {
     OUT.println();
   }
 
-  public void printBalancesAndTotal() {
+  private void printBalancesAndTotal() {
     List<Integer> balances = getBalances();
 
     OUT.print(balances.stream().map(this::pad).collect(joining(" ")));
     OUT.println(" " + pad(balances.stream().mapToInt(Integer::intValue).sum()));
+  }
+
+  public void printBalancesAndTotalThenSleep() throws InterruptedException {
+    printBalancesAndTotal();
+    Thread.sleep(100L);
   }
 
   private String pad(Integer value) {

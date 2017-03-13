@@ -7,7 +7,7 @@ import org.junit.Test;
 public class AccountTest {
 
   @Test
-  public void initialBalanceIsSet() {
+  public void setsInitialBalance() {
     Account account = new Account(5);
 
     assertThat(account.getBalance()).isEqualTo(5);

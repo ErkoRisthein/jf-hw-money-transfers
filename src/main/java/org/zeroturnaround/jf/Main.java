@@ -17,8 +17,7 @@ public class Main {
     simulator.startTransfers();
 
     while (simulator.isRunning()) {
-      simulator.printBalancesAndTotal();
-      Thread.sleep(100L);
+      simulator.printBalancesAndTotalThenSleep();
     }
 
     simulator.printFinalBalancesAndTotal();
