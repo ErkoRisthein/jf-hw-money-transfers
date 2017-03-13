@@ -48,6 +48,8 @@ public boolean isRunning() {
 
 5) Don’t use `exit()` or `halt()` to stop the program.
 
+6) **Transfers must run concurrently if they have no accounts in common!!!**
+
 Various tips
 -----------------------
 
