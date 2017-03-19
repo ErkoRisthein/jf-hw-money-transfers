@@ -1,15 +1,14 @@
 package org.zeroturnaround.jf.homework7;
 
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
-
 import java.io.BufferedOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
-import org.apache.commons.lang3.RandomUtils;
+
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class BankSimulator {
 
@@ -17,10 +16,11 @@ public class BankSimulator {
 
   private final List<Account> accounts;
   private final List<Donator> donators;
+  private final AccountLock accountLock = new AccountLock();
 
   public BankSimulator(int n) {
     accounts = IntStream.range(0, n).mapToObj(i -> new Account(n)).collect(toList());
-    donators = accounts.stream().map(a -> new Donator(a, targetAccountsFor(a))).collect(toList());
+    donators = accounts.stream().map(account -> new Donator(account, targetAccountsFor(account), accountLock)).collect(toList());
   }
 
   private List<Account> targetAccountsFor(Account account) {
@@ -38,14 +38,17 @@ public class BankSimulator {
    * Returns {@code false} when all transfers have completed ({@code true} otherwise) in a thread-safe, deadlock-free manner.
    */
   public boolean isRunning() {
-    return RandomUtils.nextInt(0, 10) < 9; // FIXME
+    return !donators.stream().allMatch(Donator::isDone);
   }
 
   /**
    * Returns balances of all {@link #accounts} in a thread-safe, deadlock-free manner.
    */
   List<Integer> getBalances() {
-    return new ArrayList<>(); // FIXME
+    accountLock.readLock().lock();
+    List<Integer> balances = accounts.stream().map(Account::getBalance).collect(toList());
+    accountLock.readLock().unlock();
+    return balances;
   }
 
   public void printInitialBalancesAndTotal() {

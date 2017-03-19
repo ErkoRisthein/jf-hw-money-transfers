@@ -1,9 +1,10 @@
 package org.zeroturnaround.jf.homework7;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
 
 import java.util.Arrays;
-import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DonatorTest {
 
@@ -12,7 +13,7 @@ public class DonatorTest {
     Account account1 = new Account(5);
     Account account2 = new Account(17);
     Account account3 = new Account(8);
-    Donator donator = new Donator(account1, Arrays.asList(account2, account3));
+    Donator donator = new Donator(account1, Arrays.asList(account2, account3), new AccountLock());
 
     donator.run();
 
